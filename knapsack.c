@@ -107,15 +107,9 @@ unsigned long which(item_t *items, int **bag, int n, int max)
     return combo;
 }
 
-unsigned long dp(item_t *items, int n, int max)
+void bu(int **s, item_t *items, int n, int max)
 {
-    /* Allocate memory for the array. */
-    int i, j, take, notake; 
-    int **s = (int **)malloc((n * sizeof(int*)));
-    unsigned long combo;
-
-    for (i = 0; i < n; i++)
-        s[i] = (int *)malloc((max + 1) * sizeof(int));
+    int i, j, take, notake;
 
     /* Fill in item 1 (we start taking it when the bag is big enough) */
     for (j = 0; j < items[0].cost; j++) s[0][j] = 0;
@@ -145,8 +139,19 @@ unsigned long dp(item_t *items, int n, int max)
             s[i][j] = (take >= notake) ? take : notake;
         }
     }
+}
+
+unsigned long dp(item_t *items, int n, int max)
+{
+    /* Allocate memory for the array. */
+    unsigned long combo;
+    int i, **s = (int **)malloc((n * sizeof(int*)));
+    for (i = 0; i < n; i++) {
+        s[i] = (int *)malloc((max + 1) * sizeof(int));
+    }
 
     /* Extract combination of items */
+    bu(s, items, n, max);
     combo = which(items, s, n, max);
 
     printf("best using dp=%i\n", s[n-1][max]);
