@@ -9,14 +9,14 @@ Note:
 
 (1) The program was implemented in ANSI-C so that it would compile on Borland 
     Turbo C++ (version 3.0) and on a 80286 12Mhz. I don't know which version of 
-    C it actially uses, but ANSI C seems to be compatible.
+    C it actually uses, but ANSI C seems to be compatible.
 (2) The terms "Knapsack" and "Bag" are used interchangeably.
 *******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <time.h> /* for more accurate timing */
+#include <time.h> /* for more accurate timing (and also easier on 286 ) */
 
 /* The maximum weight that the knapsack can hold. */
 #define MAX_WEIGHT 50
@@ -43,7 +43,7 @@ int get_items(char *filename, item_t **data)
 
     /* Get numbner of items, allocate memory? */
     if (!fgets(line, sizeof(line), file)) return 0;
-    cnt = (int)strtol(token = strtok(line, ","), (char **)NULL, 10);
+    cnt = (int)strtol(line, (char **)NULL, 10);
     *data = (item_t *)malloc(cnt * sizeof(item_t));
 
     /* Read in the items. */
@@ -111,8 +111,7 @@ unsigned long bruteforce(item_t *items, int n, int max)
 
                 /* If the bag already exceeds the weight, terminiate 
                    immediately.  This is the only real optimisation (I can think 
-                   of) that can be made to the brute-force technique.  I left it
-                   out of the video for dramatic effect. */
+                   of) that can be made to the brute-force technique. */
                 if (cost > max) {
                     break;
                 }
@@ -285,12 +284,12 @@ int main(int argc, char *argv[])
     /* This is the brute force routine. */
     start = clock();
 
-    combo = bruteforce(d, cnt, MAX_WEIGHT);
-    quickprint(d, cnt, combo);
+    /*combo = bruteforce(d, cnt, MAX_WEIGHT);
+    quickprint(d, cnt, combo);*/
 
     end = clock();    
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;    
-    printf("Time used: %f\ns", cpu_time_used);
+    printf("Time used: %f\n", cpu_time_used);
 
     printf("===============================\n");
 
@@ -303,7 +302,7 @@ int main(int argc, char *argv[])
 
     end = clock();    
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;    
-    printf("Time used: %f\ns", cpu_time_used);
+    printf("Time used: %f\n", cpu_time_used);
     printf("===============================\n");
 
     free(d);
